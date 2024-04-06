@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package order;
+option go_package="./order";
+
+service Order {
+  rpc Ping                   (Request)                       returns(Response);
+  rpc CreateOrder            (CreateOrderRequest)            returns(CreateOrderResponse);
+  rpc GetOrderRollback       (GetOrderRollbackRequest)       returns(GetOrderRollbackResponse);
+
+
+  rpc GetOrder               (GetOrderRequest)               returns(GetOrderResponse);
+  rpc UpdateOrder            (UpdateOrderRequest)            returns(UpdateOrderResponse);
+
+  rpc CreateOrderGoods       (CreateOrderGoodsRequest)       returns(CreateOrderGoodsResponse);
+  rpc GetOrderGoodsByOrderID (GetOrderGoodsByOrderIDRequest) returns(GetOrderGoodsByOrderIDResponse);
+
+  //TCC
+  rpc TCCTradingOrder              (TCCTradingOrderRequest)                returns(TCCTradingOrderResponse);//冻结库存
+  rpc TCCTradingLockOrder          (TCCTradingLockOrderRequest)            returns(TCCTradingLockOrderResponse);//冻结锁定库存
+  rpc TCCTradingRollbackOrder      (TCCTradingRollbackOrderRequest)        returns(TCCTradingRollbackOrderResponse);//回滚
+
+}
+
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
+
+message OrderInfo {
+  int64  ID        = 10;
+  int64  UserID    = 20;
+  string OrderNO   = 30;
+  string Amount    = 40;
+  int64  State     = 50;
+  int64  CreatedAt = 60;
+}
+
+message OrderGoodsInfo {
+  int64  ID        = 10;
+  int64  OrderID   = 20;
+  int64  GoodsID   = 30;
+  string UnitPrice = 40;
+  string GoodName  = 50;
+  int64  Num       = 60;
+}
+
+message CreateOrderRequest {
+  OrderInfo Info = 10;
+}
+
+message CreateOrderResponse {
+  OrderInfo Info = 10;
+}
+
+
+message GetOrderRollbackRequest {
+  OrderInfo Info = 10;
+}
+
+message GetOrderRollbackResponse {
+  OrderInfo Info = 10;
+}
+
+message GetOrderRequest {
+  int64 ID = 10;
+}
+
+message GetOrderResponse {
+  OrderInfo Info = 10;
+}
+
+message UpdateOrderRequest {
+  OrderInfo Info = 10;
+}
+
+message UpdateOrderResponse {
+  OrderInfo Info = 10;
+}
+
+message CreateOrderGoodsRequest {
+  repeated OrderGoodsInfo Infos = 10;
+}
+
+message CreateOrderGoodsResponse {
+  repeated OrderGoodsInfo Infos = 10;
+}
+
+message GetOrderGoodsByOrderIDRequest {
+  int64 OrderID = 10;
+}
+
+message GetOrderGoodsByOrderIDResponse {
+  repeated OrderGoodsInfo Infos = 10;
+}
+
+message TCCTradingOrderRequest {
+  OrderInfo Info = 10;
+}
+
+message TCCTradingOrderResponse {
+  OrderInfo Info = 10;
+}
+
+
+message TCCTradingLockOrderRequest {
+  OrderInfo Info = 10;
+}
+
+message TCCTradingLockOrderResponse {
+  OrderInfo Info = 10;
+}
+
+
+message TCCTradingRollbackOrderRequest {
+  OrderInfo Info = 10;
+}
+
+message TCCTradingRollbackOrderResponse {
+  OrderInfo Info = 10;
+}

@@ -1,0 +1,89 @@
+syntax = "v1"
+
+type OrderNotifRequest {
+}
+
+type OrderNotifResponse {
+	Message string `json:"message"`
+}
+
+type Goods {
+	GoodID int64 `json:"good_id"`
+	Num    int64 `json:"num"`
+}
+
+type CreateOrderRequest {
+	UserID int64   `json:"user_id"`
+	Goods  []Goods `json:"goods"`
+}
+
+type CreateOrderResponse {
+	Url string `json:"url"`
+}
+
+//冻结
+type TCCInfo {
+	GoodID int64 `json:"good_id"`
+	Num    int64 `json:"num"`
+}
+type (
+	TCCTradingNumTry {
+		UserID   int64     `json:"user_id"`
+		TCCInfos []TCCInfo `json:"tcc_infos"`
+	}
+
+	TCCTradingNumConfirm {
+		UserID   int64     `json:"user_id"`
+		TCCInfos []TCCInfo `json:"tcc_infos"`
+	}
+	TCCTradingNumCancel {
+		UserID   int64     `json:"user_id"`
+		TCCInfos []TCCInfo `json:"tcc_infos"`
+	}
+)
+
+//解冻
+
+type (
+	TCCBalanceNumTryRequest {
+		UserID int64 `json:"user_id"`
+	}
+
+	TCCBalanceNumConfirmRequest {
+		OrderNo string `json:"order_no"`
+	}
+	TCCBalanceNumCancelRequest {
+		OrderNo string `json:"order_no"`
+	}
+	TCCBalanceNumTryResponse {
+		ID int64 `json:"id"`
+	}
+
+	TCCBalanceNumConfirmResponse {
+		OrderNo string `json:"order_no"`
+	}
+	TCCBalanceNumCancelResponse {
+		OrderNo string `json:"order_no"`
+	}
+)
+service gateway-api {
+	@handler OrderNotif
+	post /order/notif (OrderNotifRequest) returns (OrderNotifResponse)
+	@handler OrderCreate
+	post /order/create (CreateOrderRequest) returns (CreateOrderResponse)
+
+	//冻结就是商品库存
+	@handler TCCTradingNumTry
+	post /Goods/TCCTradingNumTry (TCCTradingNumTry) returns (TCCTradingNumTry)
+	@handler TCCTradingNumConfirm
+	post /Goods/TCCTradingNumConfirm (TCCTradingNumConfirm) returns (TCCTradingNumConfirm)
+	@handler TCCTradingNumCancel
+	post /Goods/TCCTradingNumCancel (TCCTradingNumCancel) returns (TCCTradingNumCancel)
+	//解冻是创建订单
+	@handler TCCBalanceNumTry
+	post /Goods/TCCBalanceNumTry (TCCBalanceNumTryRequest) returns (TCCBalanceNumTryResponse)
+	@handler TCCBalanceNumConfirm
+	post /Goods/TCCBalanceNumConfirm (TCCBalanceNumConfirmRequest) returns (TCCBalanceNumConfirmResponse)
+	@handler TCCBalanceNumCancel
+	post /Goods/TCCBalanceNumCancel (TCCBalanceNumCancelRequest) returns (TCCBalanceNumCancelResponse)
+}

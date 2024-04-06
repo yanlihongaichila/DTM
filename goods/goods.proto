@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package goods;
+option go_package="./goods";
+
+service Goods {
+  rpc Ping                       (Request)                             returns (Response);
+  rpc GetGoodsByIDs              (GetGoodsByIDsRequest)                returns (GetGoodsByIDsResponse);
+  rpc UpdateGoodsStocks          (UpdateGoodsStocksRequest)            returns (UpdateGoodsStocksResponse);
+  rpc UpdateGoodsStocksRollback  (UpdateGoodsStocksRollbackRequest)    returns (UpdateGoodsStocksRollbackResponse);
+  //TCC
+  rpc TCCTradingNum              (TCCTradingNumRequest)                returns(TCCTradingNumResponse);//冻结库存
+  rpc TCCTradingLockNum          (TCCTradingLockNumRequest)            returns(TCCTradingLockNumResponse);//冻结锁定库存
+  rpc TCCTradingRollbackNum      (TCCTradingRollbackNumRequest)        returns(TCCTradingRollbackNumResponse);//回滚
+}
+
+
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
+
+message GoodsInfo {
+  int64  ID    = 10;
+  string Name  = 20;
+  string Price = 30;
+  int64  Stock = 40;
+}
+
+message GetGoodsByIDsRequest {
+  repeated int64 IDs = 10;
+}
+
+message GetGoodsByIDsResponse {
+  repeated GoodsInfo Infos = 10;
+}
+message UpdateStockReq {
+  int64 ID  = 10;
+  int64 Num = 20;
+}
+message UpdateGoodsStocksRequest {
+  repeated UpdateStockReq GoodsInfos = 10;
+}
+
+message UpdateGoodsStocksResponse {
+  repeated GoodsInfo Infos = 10;
+}
+
+
+message UpdateGoodsStocksRollbackRequest {
+  repeated UpdateStockReq GoodsInfos = 10;
+}
+
+message UpdateGoodsStocksRollbackResponse {
+  repeated GoodsInfo Infos = 10;
+}
+
+
+//TCC
+message TCCInfo {
+  int64 ID  = 10;
+  int64 Num = 20;
+}
+message TCCTradingNumRequest {
+  repeated TCCInfo TradingNum = 10;
+}
+
+message TCCTradingNumResponse {
+  repeated TCCInfo TradingNum = 10;
+}
+
+message TCCTradingLockNumRequest {
+  repeated TCCInfo TradingNum = 10;
+}
+
+message TCCTradingLockNumResponse {
+  repeated TCCInfo TradingNum = 10;
+}
+
+message TCCTradingRollbackNumRequest {
+  repeated TCCInfo TradingNum = 10;
+}
+
+message TCCTradingRollbackNumResponse {
+  repeated TCCInfo TradingNum = 10;
+}
